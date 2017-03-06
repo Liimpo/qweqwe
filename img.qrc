@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>flag.png</file>
+        <file>Gazorpazorpfield_Bitch.png</file>
+        <file>plumbus.png</file>
+        <file>Drawing.jpeg</file>
+        <file>four.jpeg</file>
+        <file>three.jpeg</file>
+        <file>two.jpeg</file>
+        <file>plumbusCleared.png</file>
+        <file>poopy.jpg</file>
+    </qresource>
+</RCC>
