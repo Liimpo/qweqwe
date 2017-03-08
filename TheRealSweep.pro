@@ -28,16 +28,19 @@ SOURCES += main.cpp\
     minecounter.cpp \
     testing.cpp \
     b.cpp \
-    sweepboard.cpp
+    sweepboard.cpp \
+    highscore.cpp
 
 HEADERS  += mainwindow.h \
     minecounter.h \
     testing.h \
     b.h \
-    sweepboard.h
+    sweepboard.h \
+    highscore.h
 
 FORMS    += mainwindow.ui \
-    testing.ui
+    testing.ui \
+    highscore.ui
 
 RESOURCES += \
     img.qrc

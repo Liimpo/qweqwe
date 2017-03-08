@@ -24,7 +24,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>play gem</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="hiscoreButton">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>130</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>hiscore</string>
     </property>
    </widget>
   </widget>

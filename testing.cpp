@@ -13,13 +13,14 @@ testing::testing(QWidget *parent, int mineNr, int startSize) :
     QDialog(parent),
     ui(new Ui::testing)
 {
+    this->nrOfFlags = 0;
     this->nrOfMines = mineNr;
     this->sizeOfBoard = startSize;
     //If this reaches nrOfMines u win.
     this->mineGoal = 0;
 
     ui->setupUi(this);
-    ui->flagCount->display (this->nrOfMines);
+    ui->flagCount->display (this->nrOfMines - this->nrOfFlags);
     //QGridLayout *layout = new QGridLayout;
     //Layout designs
     ui->mineBoard->setSpacing(0);
@@ -130,8 +131,10 @@ void testing::buttonIsPressed(QString coordinates)
     int row = results.at(0).toInt();
     int column = results.at(1).toInt();
 
-    setIcon(buttonPressed, row, column);
-    if (game->isAMine(row, column))
+    if (boardChecker[row][column] != FLAG)
+        setIcon(buttonPressed, row, column);
+
+    if (game->isAMine(row, column) && boardChecker[row][column] != FLAG)
     {
         this->box = new QMessageBox(this);
         box->setText("L O S E R\nO\nS\nE\nR");
@@ -139,8 +142,9 @@ void testing::buttonIsPressed(QString coordinates)
         box->exec();
         this->close();
     }
-    else if (!buttonPressed->isFlat())
+    else if (!buttonPressed->isFlat() && boardChecker[row][column] != FLAG)
         buttonPressed->setFlat(true);
+
 }
 
 void testing::otherButtonIsPressed(QString coordinates)
@@ -158,16 +162,20 @@ void testing::otherButtonIsPressed(QString coordinates)
         boardChecker[row][column] = 0;
         if (game->getVal(row,column) == MINE)
             this->mineGoal--;
+        this->nrOfFlags--;
     }
-    else if (!buttonPressed->isFlat())
+    else if (!buttonPressed->isFlat() && this->nrOfFlags != this->nrOfMines)
     {
-        buttonPressed->setIcon(QIcon(":/poopy.jpg"));
+        buttonPressed->setIcon(QIcon(":/poopy.png"));
         if (game->getVal(row,column) == MINE && boardChecker[row][column] == 0)
             this->mineGoal++;
         boardChecker[row][column] = FLAG;
+        this->nrOfFlags++;
 
     }
-    qDebug() << this->mineGoal;
+    //Update the display
+    ui->flagCount->display(this->nrOfMines - this->nrOfFlags);
+    //qDebug() << this->mineGoal;
     if (this->mineGoal == this->nrOfMines)
         winCase();
 }
@@ -180,16 +188,16 @@ void testing::setIcon(b *buttonToSet, int row, int column)
         buttonToSet->setIcon(QIcon(":/plumbusCleared.png"));
     //Är det en etta sätts en etta ut.
     else if (game->getVal(row,column) == 1)
-        buttonToSet->setIcon(QIcon(":/Drawing.jpeg"));
+        buttonToSet->setIcon(QIcon(":/Drawing.png"));
     //Är det en tvåa sätts en tvåa ut
     else if (game->getVal(row,column) == 2)
-        buttonToSet->setIcon(QIcon(":/two.jpeg"));
+        buttonToSet->setIcon(QIcon(":/two.png"));
     //Är det en 3:a sätts en trea ut
     else if (game->getVal(row, column) == 3)
-        buttonToSet->setIcon(QIcon(":/three.jpeg"));
+        buttonToSet->setIcon(QIcon(":/three.png"));
     //Är det en 4:a sätts en 4a ut
     else if (game->getVal(row,column) == 4)
-        buttonToSet->setIcon(QIcon(":/four.jpeg"));
+        buttonToSet->setIcon(QIcon(":/four.png"));
 
     //Är det en mina ska en mina sättas ut.
     else if (game->getVal(row,column) == MINE)

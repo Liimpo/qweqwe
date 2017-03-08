@@ -22,6 +22,7 @@ SweepBoard::SweepBoard(double boardSize)
     }
     qDebug() << "asd";
     sweepSetup();
+    /* SKRIVER UT BRÄDET JÄTTEBRA DEBUG FUNKTION!!!
     for(int i = 0; i < 8; i++)
     {
         for(int j = 0; j < 8; j++)
@@ -31,7 +32,7 @@ SweepBoard::SweepBoard(double boardSize)
             if (j == 0)
                 j = 8;
         }
-    }
+    }*/
 }
 //Destruktor
 SweepBoard::~SweepBoard()
@@ -42,7 +43,7 @@ SweepBoard::~SweepBoard()
 void SweepBoard::sweepSetup()
 {
     qsrand(time(NULL));
-    for(int i = 0; i < 9; i++)
+    for(int i = 0; i < 11; i++)
     {
         int row, column;
         do
@@ -71,7 +72,7 @@ void SweepBoard::sweepSetup()
         // [][][x]
         // [][][]
         // [][][]
-        if ( (row-1) != -1 && (column+1) != -1 && gameArr[row-1][column+1] != MINE)
+        if ( (row-1) != -1 && (column+1) != 8 && gameArr[row-1][column+1] != MINE)
             gameArr[row-1][column+1]++;
 
         // [][][]

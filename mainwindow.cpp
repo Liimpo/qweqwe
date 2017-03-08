@@ -16,8 +16,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionEasy_clicked()
 {
-   this->testPtr = new testing(this, 9, 64);
+   this->testPtr = new testing(this, 11, 64);
    //testPtr->setFixedSize(300,300);
    testPtr->setWindowFlags(this->windowFlags() ^ Qt::FramelessWindowHint);
    testPtr->exec();
+}
+
+void MainWindow::on_hiscoreButton_clicked()
+{
+    this->scorePtr = new Highscore();
+    scorePtr->exec();
 }

@@ -1,13 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>flag.png</file>
         <file>Gazorpazorpfield_Bitch.png</file>
         <file>plumbus.png</file>
-        <file>Drawing.jpeg</file>
-        <file>four.jpeg</file>
-        <file>three.jpeg</file>
-        <file>two.jpeg</file>
         <file>plumbusCleared.png</file>
-        <file>poopy.jpg</file>
+        <file>Drawing.png</file>
+        <file>four.png</file>
+        <file>poopy.png</file>
+        <file>three.png</file>
+        <file>two.png</file>
     </qresource>
 </RCC>

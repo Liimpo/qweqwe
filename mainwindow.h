@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "testing.h"
+#include "highscore.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -19,7 +20,10 @@ private slots:
 
     void on_actionEasy_clicked();
 
+    void on_hiscoreButton_clicked();
+
 private:
+    Highscore *scorePtr;
     testing *testPtr;
     Ui::MainWindow *ui;
 };

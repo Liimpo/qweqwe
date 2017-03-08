@@ -40,6 +40,8 @@ signals:
 private:
     Ui::testing *ui;
     int mineVal;
+    int mineIsFlagged;
+    int nrOfFlags;
     int sizeOfBoard;
     int nrOfMines, mineGoal;
     QMessageBox *box;
