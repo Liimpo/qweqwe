@@ -6,13 +6,13 @@
 #include "piece.h"
 #include "QGridLayout"
 #include <QString>
-
-#define SPLITTER ","
+#include <QTimer>
 
 testing::testing(QWidget *parent, int mineNr, int startSize) :
     QDialog(parent),
     ui(new Ui::testing)
 {
+    this->timeSinceStart = 0;
     this->nrOfFlags = 0;
     this->nrOfMines = mineNr;
     this->sizeOfBoard = startSize;
@@ -25,6 +25,11 @@ testing::testing(QWidget *parent, int mineNr, int startSize) :
     //Layout designs
     ui->mineBoard->setSpacing(0);
     ui->mineBoard->setHorizontalSpacing(0);
+    //Här kommer gametimern som ska fixa med hiscore
+    ui->gameTimer->setDigitCount(2);
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(refreshTime()));
+    timer->start(1000);
 
     //Behöver ytterliggare en multi-dim array som håller koll på om knappar är använda
     //Eller om en flagga är uppsatt.
@@ -99,6 +104,11 @@ int testing::getSizeOfBoard()const
     return this->sizeOfBoard;
 }
 
+int testing::getTimeSinceStart()const
+{
+    return this->timeSinceStart;
+}
+
 void testing::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
@@ -131,19 +141,22 @@ void testing::buttonIsPressed(QString coordinates)
     int row = results.at(0).toInt();
     int column = results.at(1).toInt();
 
-    if (boardChecker[row][column] != FLAG)
-        setIcon(buttonPressed, row, column);
-
-    if (game->isAMine(row, column) && boardChecker[row][column] != FLAG)
+    //Om en knapp är flat ska den inte gå att trycka på. Inte heller om det är en flagga!
+    if (!buttonPressed->isFlat() && boardChecker[row][column] != FLAG)
     {
-        this->box = new QMessageBox(this);
-        box->setText("L O S E R\nO\nS\nE\nR");
-        box->setStandardButtons(QMessageBox::Ok);
-        box->exec();
-        this->close();
+        if (boardChecker[row][column] != FLAG)
+            setIcon(buttonPressed, row, column);
+
+        if (game->isAMine(row, column) && boardChecker[row][column] != FLAG)
+            this->loseCase();
+
+        //Om det är en tom ruta ska närliggande rutor visa sig. Eftersom det inte finns en mina jämte.
+        if (game->getVal(row, column) == 0)
+            this->revealClose(row, column);
+
+        else if (!buttonPressed->isFlat() && boardChecker[row][column] != FLAG)
+            buttonPressed->setFlat(true);
     }
-    else if (!buttonPressed->isFlat() && boardChecker[row][column] != FLAG)
-        buttonPressed->setFlat(true);
 
 }
 
@@ -204,11 +217,104 @@ void testing::setIcon(b *buttonToSet, int row, int column)
         buttonToSet->setIcon(QIcon(":/Gazorpazorpfield_Bitch.png"));
 }
 
+void testing::revealClose(int row, int column)
+{
+    QString tempCoord = "";
+    //Måste kolla så att de närliggande inte redan är nedtryckta före jag kör min reveal
+    // Fixar fram knappen så att jag kan byta ikon på den osv.
+    QString coordinates = QString::number(row) + "," + QString::number(column);
+    b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(coordinates));
+    //Sätter knappen nedtryckt.
+    buttonPressed->setFlat(true);
+    //Byter ikon
+    this->setIcon(buttonPressed, row, column);
+
+    // vänstra övre hörn
+    if ( (row - 1) != -1 && (column - 1) != -1)
+    {
+        tempCoord = QString::number(row-1) + "," + QString::number(column-1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row-1, column-1);
+    }
+    // övre mitt
+    if ( (row - 1) != -1)
+    {
+        tempCoord = QString::number(row-1) + "," + QString::number(column);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row-1, column);
+    }
+    // höger övre hörn
+    if ( (row - 1) != -1 && (column + 1) != 8)
+    {
+        tempCoord = QString::number(row-1) + "," + QString::number(column+1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row-1, column+1);
+    }
+    // vänster
+    if ( (column - 1) != -1)
+    {
+        tempCoord = QString::number(row) + "," + QString::number(column-1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row, column-1);
+    }
+    // höger
+    if ( (column + 1) != 8)
+    {
+        tempCoord = QString::number(row) + "," + QString::number(column+1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row, column+1);
+    }
+    // nedre vänster hörn
+    if ( (row + 1) != 8 && (column - 1) != -1)
+    {
+        tempCoord = QString::number(row+1) + "," + QString::number(column-1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row+1, column-1);
+    }
+    // nedre mitt
+    if ( (row + 1) != 8)
+    {
+        tempCoord = QString::number(row+1) + "," + QString::number(column);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row+1, column);
+    }
+    // nedre högra hörn
+    if ( (row + 1) != 8 && (column + 1) != 8)
+    {
+        tempCoord = QString::number(row+1) + "," + QString::number(column+1);
+        b *buttonPressed = qobject_cast<b*>(signalMapper->mapping(tempCoord));
+        buttonPressed->setFlat(true);
+        this->setIcon(buttonPressed, row+1, column+1);
+    }
+}
+
 void testing::winCase()
 {
     this->box = new QMessageBox(this);
-    box->setText("H-H-H-HEY, YOU MANAGED TO AVOID ALL OF THE GAZORPAZORPFIELD\n WAY TO GO BOY!\nYOU'RE WINNER!");
+    box->setText("H-H-H-HEY, YOU MANAGED TO AVOID ALL OF THE GAZORPAZORPFIELD\n WAY TO GO BOY!\nYOU'RE WINNER!\nYour time was: " + QString::number(this->timeSinceStart));
     box->setStandardButtons(QMessageBox::Ok);
     box->exec();
     this->close();
+}
+
+void testing::loseCase()
+{
+    this->box = new QMessageBox(this);
+    box->setText("L O S E R\nO\nS\nE\nR");
+    box->setStandardButtons(QMessageBox::Ok);
+    box->exec();
+    this->close();
+}
+
+void testing::refreshTime()
+{
+    this->timeSinceStart++;
+    ui->gameTimer->display(this->timeSinceStart);
 }

@@ -26,11 +26,15 @@ public:
     void setSizeOfBoard(int size);
     int getNrOfMines()const;
     int getSizeOfBoard()const;
+    int getTimeSinceStart()const;
     virtual ~testing();
 
     void setIcon(b*, int row, int column);
     void winCase();
+    void loseCase();
+    void revealClose(int row, int column);
 public slots:
+    void refreshTime();
     void buttonIsPressed(QString);
     void otherButtonIsPressed(QString);
 
@@ -39,6 +43,7 @@ signals:
 
 private:
     Ui::testing *ui;
+    int timeSinceStart;
     int mineVal;
     int mineIsFlagged;
     int nrOfFlags;

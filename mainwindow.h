@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include "testing.h"
 #include "highscore.h"
+#include <QSettings>
 #include <QMainWindow>
 
 namespace Ui {
@@ -25,6 +26,8 @@ private slots:
 private:
     Highscore *scorePtr;
     testing *testPtr;
+    int hiScoreTime;
+    QSettings *mineSettings;
     Ui::MainWindow *ui;
 };
 
