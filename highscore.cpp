@@ -17,7 +17,7 @@ Highscore::Highscore(QWidget *parent) :
     ui->setupUi(this);
     //Vill att min toplista ska visa "top 10. skapar en constant TOP som är 10."
     ui->hiscoreTable->setRowCount(TOP);
-
+    this->setWindowTitle("TOP 10 HISCORE!!");
     //Tabell med element
     for (int i = 0; i < ui->hiscoreTable->rowCount(); i++)
     {
@@ -80,7 +80,7 @@ bool Highscore::newResult(int diff,int time)
 
         success = true;
         //Det här är en koll så att användaren matar in ett namn. Annars skrivs unknown in som vinnare.
-        /*bool isOk;
+        bool isOk;
 
         QString namePrep(QDir::home().dirName());
 
@@ -90,12 +90,12 @@ bool Highscore::newResult(int diff,int time)
             QChar firstChar = namePrep.at(0);
 
             if (firstChar.isLower() == true) namePrep[0] = firstChar.toUpper();
-        }*/
+        }
 
-        QString name = QInputDialog::getText(parentWidget(), tr("GAZORPAZORPFIELDSWEEPER"), tr("You're winner"), QLineEdit::Normal);
+        QString name = QInputDialog::getText(parentWidget(), tr("GAZORPAZORPFIELDSWEEPER"), tr("You're winner"), QLineEdit::Normal, namePrep, &isOk);
 
         //Sätt namn som unknown.
-        if (name.isEmpty() == true)
+        if (isOk == false || name.isEmpty() == true)
             name = tr("NONAME");
         if (name == "-")
             name = tr("NONAME");

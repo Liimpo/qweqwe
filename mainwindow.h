@@ -23,6 +23,10 @@ private slots:
 
     void on_hiscoreButton_clicked();
 
+    void on_actionMedium_clicked();
+
+    void on_actionHard_clicked();
+
 private:
     Highscore *scorePtr;
     testing *testPtr;

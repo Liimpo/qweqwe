@@ -20,15 +20,47 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionEasy_clicked()
 {
-   this->testPtr = new testing(this, 1, 64);
-   //testPtr->setFixedSize(300,300);
+   this->testPtr = new testing(this, 10);
    testPtr->setWindowFlags(this->windowFlags() ^ Qt::FramelessWindowHint);
    testPtr->exec();
    this->hiScoreTime = this->testPtr->getTimeSinceStart();
-   scorePtr->newResult(1,this->hiScoreTime);
+   if (testPtr->getIsWin())
+    scorePtr->newResult(1,this->hiScoreTime);
+}
+
+void MainWindow::on_actionMedium_clicked()
+{
+    this->testPtr = new testing(this, 20);
+    testPtr->setWindowFlags(this->windowFlags() ^ Qt::FramelessWindowHint);
+
+    //Gömmer mainrutan :^)
+    this->hide();
+    testPtr->exec();
+    this->show();
+
+    this->hiScoreTime = this->testPtr->getTimeSinceStart();
+    if (testPtr->getIsWin())
+     scorePtr->newResult(2,this->hiScoreTime);
+}
+
+void MainWindow::on_actionHard_clicked()
+{
+    this->testPtr = new testing(this, 30);
+    testPtr->setWindowFlags(this->windowFlags() ^ Qt::FramelessWindowHint);
+
+    //Gömmer mainrutan :^)
+    this->hide();
+    testPtr->exec();
+    this->show();
+
+    this->hiScoreTime = this->testPtr->getTimeSinceStart();
+    if (testPtr->getIsWin())
+     scorePtr->newResult(3,this->hiScoreTime);
 }
 
 void MainWindow::on_hiscoreButton_clicked()
 {
+    this->hide();
     scorePtr->exec();
+    this->show();
 }

@@ -14,31 +14,45 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="actionEasy">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>80</y>
-      <width>75</width>
-      <height>23</height>
+      <y>10</y>
+      <width>186</width>
+      <height>191</height>
      </rect>
     </property>
-    <property name="text">
-     <string>play gem</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="hiscoreButton">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>130</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>hiscore</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="actionEasy">
+       <property name="text">
+        <string>EzPz</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="actionMedium">
+       <property name="text">
+        <string>Maybe a challenge?</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="actionHard">
+       <property name="text">
+        <string>ITS TIME TO SQUANCH</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="hiscoreButton">
+       <property name="text">
+        <string>hiscore</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -47,7 +61,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

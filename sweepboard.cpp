@@ -4,17 +4,20 @@
 #include <QDebug>
 #include "time.h"
 
-SweepBoard::SweepBoard(double boardSize)
+SweepBoard::SweepBoard(int boardSize, int mineNr)
 {
     //Reseting the board.
     this->sizeOfBoard = boardSize;
-    int tempSize = sqrt(this->sizeOfBoard);
-    //int *tempArr = new int[tempSize][tempSize];
-    //qDebug() << tempSize;
-    //this->gameArr[tempSize][tempSize];
-    for(int i = 0; i < 8; i++)
+    this->nrOfMines = mineNr;
+    this->gameArr = new int*[this->sizeOfBoard];
+    for (int i = 0; i < this->sizeOfBoard; i++)
     {
-        for(int j = 0; j < 8; j++)
+        this->gameArr[i] = new int[this->sizeOfBoard];
+    }
+
+    for(int i = 0; i < this->sizeOfBoard; i++)
+    {
+        for(int j = 0; j < this->sizeOfBoard; j++)
         {
             gameArr[i][j] = 0;
             qDebug() << i << " " << j;
@@ -22,15 +25,16 @@ SweepBoard::SweepBoard(double boardSize)
     }
     qDebug() << "asd";
     sweepSetup();
-    /* SKRIVER UT BRÄDET JÄTTEBRA DEBUG FUNKTION!!!
-    for(int i = 0; i < 8; i++)
+
+    // SKRIVER UT BRÄDET JÄTTEBRA DEBUG FUNKTION!!!
+    /*for(int i = 0; i < this->sizeOfBoard; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < this->sizeOfBoard; j++)
         {
 
-           qDebug() << getVal(j,i) << getVal(j+1,i) << getVal(j+2,i) << getVal(j+3,i) << getVal(j+4,i) << getVal(j+5,i) << getVal(j+6,i) << getVal(j+7,i);
+           qDebug() << getVal(j,i) << getVal(j+1,i) << getVal(j+2,i) << getVal(j+3,i); //<< getVal(j+4,i) << getVal(j+5,i); //<< getVal(j+6,i) << getVal(j+7,i);
             if (j == 0)
-                j = 8;
+                j = sizeOfBoard;
         }
     }*/
 }
@@ -43,17 +47,16 @@ SweepBoard::~SweepBoard()
 void SweepBoard::sweepSetup()
 {
     qsrand(time(NULL));
-    for(int i = 0; i < 11; i++)
+    for(int i = 0; i < this->nrOfMines; i++)
     {
         int row, column;
         do
         {
-            row = qrand()% 8;
-            column = qrand()% 8;
+            row = qrand()% this->sizeOfBoard;
+            column = qrand()% this->sizeOfBoard;
         }while(gameArr[row][column] == MINE);
 
         gameArr[row][column] = MINE;
-
         // För att hitta hur många minor som finns i närheten av det klickade området
         // Kör jag igenom alla 8 rutor jämte där minan blev placerad och ökar det värdet med ett.
 
@@ -72,7 +75,7 @@ void SweepBoard::sweepSetup()
         // [][][x]
         // [][][]
         // [][][]
-        if ( (row-1) != -1 && (column+1) != 8 && gameArr[row-1][column+1] != MINE)
+        if ( (row-1) != -1 && (column+1) != this->sizeOfBoard && gameArr[row-1][column+1] != MINE)
             gameArr[row-1][column+1]++;
 
         // [][][]
@@ -84,25 +87,25 @@ void SweepBoard::sweepSetup()
         // [][][]
         // [][][x]
         // [][][]
-        if ((column+1) != 8 && gameArr[row][column+1] != MINE)
+        if ((column+1) != this->sizeOfBoard && gameArr[row][column+1] != MINE)
             gameArr[row][column+1]++;
 
         // [][][]
         // [][][]
         // [x][][]
-        if ((row+1) != 8 && (column-1) != -1 && gameArr[row+1][column-1] != MINE)
+        if ((row+1) != this->sizeOfBoard && (column-1) != -1 && gameArr[row+1][column-1] != MINE)
             gameArr[row+1][column-1]++;
 
         // [][][]
         // [][][]
         // [][x][]
-        if ((row+1) != 8 && gameArr[row+1][column] != MINE)
+        if ((row+1) != this->sizeOfBoard && gameArr[row+1][column] != MINE)
             gameArr[row+1][column]++;
 
         // [][][]
         // [][][]
         // [][][x]
-        if ((row+1) != 8 && (column+1) != 8 && gameArr[row+1][column+1] != MINE)
+        if ((row+1) != this->sizeOfBoard && (column+1) != this->sizeOfBoard && gameArr[row+1][column+1] != MINE)
             gameArr[row+1][column+1]++;
     }
 }
